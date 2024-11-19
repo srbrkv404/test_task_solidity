@@ -4,46 +4,34 @@ pragma solidity >=0.8.2 <0.9.0;
 
 contract Donation {
     
-    address public owner;
+    address private owner;
 
     constructor() {
         owner = msg.sender;
     }
 
-    struct Payment {
-        uint256 amount;
-        uint256 timestamp;
-        string message;
-    }
-
     struct Donor {
         uint256 numPayments;
         uint256 paymentsSum;
-        mapping (uint256 => Payment) payments;
+        uint256[] payments;
     }
 
     mapping (address => Donor) public donors;
     address[] public donorsAddresses;
 
-    event Donate(address sender, uint256 amount, string message);
+    event Donate(address sender, uint256 amount);
 
-    function donate(string memory message) external payable {
+    function donate() external payable {
         uint256 newPaymentNum = donors[msg.sender].numPayments;
         donors[msg.sender].numPayments++;
 
-        Payment memory newPayment = Payment(
-            msg.value,
-            block.timestamp,
-            message
-        );
-
-        donors[msg.sender].payments[newPaymentNum] = newPayment;
+        donors[msg.sender].payments.push(msg.value);
         donors[msg.sender].paymentsSum += msg.value;
         if (newPaymentNum == 0) {
             donorsAddresses.push(msg.sender);
         }
 
-        emit Donate(msg.sender, msg.value, message);
+        emit Donate(msg.sender, msg.value);
     }
 
     function withdraw(address payable recipient, uint256 amount) external OnlyOwner Valid(amount) {
@@ -56,10 +44,6 @@ contract Donation {
 
     function getPaymentsSum(address donor) external view returns(uint256) {
         return donors[donor].paymentsSum;
-    }
-
-    function getBalance() public view returns(uint256) {
-        return address(this).balance;
     }
 
     function getOwner() external view returns(address) {
