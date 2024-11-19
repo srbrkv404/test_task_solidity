@@ -1,6 +1,7 @@
 contract address "0xcdbF4d3ADDe901F6dee8fca3B60be8cEAD62b8b5"
 
 Necessary to instal:
+
     "npm"
     "hardhat"
     "@nomicfoundation/hardhat-toolbox"
@@ -10,14 +11,14 @@ Necessary to instal:
     "chai"
 
 Before deploy create file .env with following content:
-    '''
+
     NETWORK="sepolia"
     INFURA_URL="https://sepolia.infura.io/v3/YOUR_INFURA_API_KEY"
     PRIVATE_KEY="YOUR_PRIVATE_KEY"
     ETHERSCAN_API="YOUR_ETHERSCAN_API_KEY"
-    '''
 
 Commands:
+
     "npx hardhat compile" -- to compile contracts/Donation.sol
     "npx hardhat coverage" -- to test contract using test/Donation.test.ts with testing coverage
     "npx hardhat run scripts/deploy.ts --network sepolia" -- to deploy contract to the sepolia testnet
